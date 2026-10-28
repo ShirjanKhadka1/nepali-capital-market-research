@@ -9,6 +9,7 @@ participants, instruments, and how it actually works.
 - Agent: nepali-capital-market-researcher (in `agents/` here, and linked
   from finance-research-agents).
 - Templates: market-review, instrument-comparison (in `templates/` here).
+- Scanner: NEPSE EMA/SMA crossover scanner (in `scanner/` here, 40/40 tests) — the executable engine for this repo; its teardown of public reference sites is in `research/`.
 - Playbook: adapted — market reviews use the same "no deleted sections"
   rule as company reports.
 - Sibling repos: nepal-market-research (companies inside this market),

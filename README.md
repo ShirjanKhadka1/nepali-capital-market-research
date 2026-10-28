@@ -16,6 +16,8 @@ a researcher, or a business looking to raise capital.
 | `agents/` | The Nepali Capital Market Researcher agent (Markdown, free, local — copy it into your own AI tool) |
 | `guides/` | Market structure guide: how NEPSE, brokers, merchant bankers, mutual funds, bonds, and regulation fit together |
 | `templates/` | Market review template, instrument comparison template, participant map template |
+| `scanner/` | NEPSE EMA/SMA crossover scanner (Python, zero dependencies, 40/40 tests): EMA/SMA crossovers, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume checks, with signal-vs-noise labels. Runs on a user-supplied CSV — no live NEPSE feed exists (no documented free public NEPSE OHLCV API verified). See `scanner/README.md`. |
+| `research/` | Teardown of public NEPSE reference sites (Nepalytix, Chart Nepali, Chukul, Nepse Alpha) and their data sources — public information only, no code copied, no paywalled data accessed. |
 
 ## Quick start — use the agent (free, local)
 
