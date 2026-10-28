@@ -1,16 +1,43 @@
+# Phase 7: OS x Python matrix + quality gate.
+# Matrix job (pytest only) runs on Linux/macOS/Windows — the
+# macos/windows combinations are CI-only: never run locally,
+# their first GitHub run is the proof. Quality and smoke jobs
+# stay on ubuntu-latest. mypy is deliberately NOT run here:
+# scanner/ uses a dual script/package import mode that mypy
+# rejects on package bases (measured 28 Oct 2026); ruff is
+# the scanner's static gate. All CI dependencies pinned to
+# versions measured 28 Oct 2026.
 name: Tests
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install pytest
+      - run: pip install "pytest==9.2.0"
       - run: python -m pytest scanner/tests/ -q
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "ruff==0.17.3"
+      - run: ruff check .
+        working-directory: scanner
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - run: python scanner/cli.py --csv scanner/examples/demo_prices.csv
