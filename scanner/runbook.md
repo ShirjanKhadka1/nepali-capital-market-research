@@ -87,3 +87,14 @@ no price target, no "likely to rise".
 
 If any item is missing, the run is incomplete — label it so rather
 than sharing a bare table of crosses.
+
+## 6. Intraday — UPCOMING, not live (28 Oct 2026)
+
+Nepal is about to try intraday trading practice, but as far as
+programme records show it is NOT yet live. This scanner is
+daily-CSV-only: it takes one row per trading day and makes no
+intraday claim, uses no intraday feed, and produces no intraday
+signal. No intraday launch date or rule is stated here. When
+SEBON/NEPSE formally announces intraday trading (with a date),
+that announcement is what would unlock intraday work — until
+then, treat anything intraday as UPCOMING / TO VERIFY.
