@@ -20,6 +20,11 @@ CSV format (multi-symbol): `symbol,sector,date,close,high,low,volume`,
 one row per symbol per trading day, dates strictly increasing per symbol.
 See `examples/demo_prices.csv`. Your CSV's source must be named wherever
 results are shared — a scan over unsourced prices is an unsourced scan.
+The exact spec (single- and multi-symbol files, validation rules, what
+counts as a bad row) plus BS/AD fiscal years, the holiday-calendar rule,
+and the corporate-action warning are in
+`../guides/nepal-data-handling.md` — read it before running a scan on
+real prices. Single-symbol files use `date,close,high,low,volume`.
 
 Tests: `python3 -m pytest tests/ -v` (40 tests, all passing on 28 Oct 2026;
 pytest itself is a test-only dependency, the scanner needs none).
