@@ -18,11 +18,10 @@ import argparse
 import sys
 
 try:
-    from data import NepseDataError, load_multi_csv, load_multi_csv_report
+    from data import load_multi_csv_report
     from scanner import scan, scan_report
 except ImportError:  # running as scanner.cli package
-    from .data import (NepseDataError, load_multi_csv,
-                       load_multi_csv_report)
+    from .data import load_multi_csv_report
     from .scanner import scan, scan_report
 
 

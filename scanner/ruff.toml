@@ -1,0 +1,12 @@
+# Ruff configuration for the NEPSE scanner (Phase 7).
+# Deliberate ignores, each with a reason — not a blanket waiver:
+# - PLR0124: `value != value` in data.py is the deliberate NaN check.
+# - SIM115: files are opened then closed via `with fh:` in data.py.
+# - TRY004: the public indicator API raises ValueError for bad input
+#   and the tests pin that (test_scanner.py); changing to TypeError
+#   would break callers. ValueError stays.
+# - BLE001: scanner.py isolates per-symbol failures by catching any
+#   analysis error, logging it, and continuing (tested); narrowing
+#   it would let one bad symbol kill the whole scan.
+[lint]
+ignore = ["PLR0124", "SIM115", "TRY004", "BLE001"]
