@@ -235,5 +235,10 @@ class NepseLiveFetcher:
         raise NepseDataError(
             "No live NEPSE data source is wired in: no documented, free, "
             "public NEPSE OHLCV API was verified on 28 Oct 2026 "
-            "(see research/indicator-source-teardown-2026-10-28.md). "
+            "(see research/indicator-source-teardown-2026-10-28.md and "
+            "research/free-data-sources-2026-10-28.md). A re-check the "
+            "same day confirmed nepalstock.com.np's public homepage "
+            "renders only 'Loading...' — its prices appear only through "
+            "its internal token-protected flow, which is undocumented "
+            "access and is NOT wired in. "
             f"Provide {symbol} as a CSV instead, and name its source.")
