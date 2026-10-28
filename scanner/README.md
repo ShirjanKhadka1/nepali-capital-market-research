@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (40 tests, all passing on 28 Oct 2026;
+Tests: `python3 -m pytest tests/ -v` (57 tests, all passing on 28 Oct 2026;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -136,7 +136,7 @@ Findings:
    the limitation.
 4. **Confirmed clean:** flat series, circuit-limit tails, single-day
    spikes, price gaps, and 2-bar histories all produce finite values or
-   `n/a`, never inf, NaN, or a crash. Final count: **40/40 tests pass.**
+   `n/a`, never inf, NaN, or a crash. Final count: **57/57 tests pass** (40 original + 17 signal-label tests).
 
 ## What this scanner deliberately does NOT do
 
@@ -167,4 +167,4 @@ Findings:
 | `tests/test_scanner.py` | 30 tests: known values, crossovers, boundaries, bad data |
 | `tests/test_edge_cases.py` | 10 tests: gaps, flat/circuit-limit series, spikes, missing days, short history, failure isolation, look-ahead |
 
-Status: **Live on GitHub** (public, main, since 28 Oct 2026); tests 40/40 verified locally 28 Oct 2026. A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); tests 57/57 verified locally 28 Oct 2026. A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
