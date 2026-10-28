@@ -78,3 +78,14 @@ Every Nepal figure carries: exchange (NEPSE), BS fiscal year where
 relevant, AD period, source, and retrieval date — or UNKNOWN/TO VERIFY.
 NEPSE tickers are never confused with other exchanges' tickers
 (NEPSE BNT ≠ NYSE BNT).
+
+## 5. Intraday trading — UPCOMING, not live (28 Oct 2026)
+
+Nepal is about to try intraday trading practice. As far as
+programme records show, intraday trading is NOT yet live: no
+launch date, no rules, and no intraday data feed are recorded
+here, and none are invented. The scanner remains daily-CSV-only,
+and no intraday signal is claimed anywhere in this programme.
+When SEBON/NEPSE formally announces intraday trading, that
+announcement (with its date) is what would unlock any intraday
+work — until then, intraday stays labelled UPCOMING / TO VERIFY.
