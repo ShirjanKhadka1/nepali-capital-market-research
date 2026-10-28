@@ -98,3 +98,11 @@ signal. No intraday launch date or rule is stated here. When
 SEBON/NEPSE formally announces intraday trading (with a date),
 that announcement is what would unlock intraday work — until
 then, treat anything intraday as UPCOMING / TO VERIFY.
+
+## 7. Risk stance on a scanner run (Phase 9, docs only)
+A scanner label is a pattern reading, never a recommendation. Before a run's
+output is shared, state its downside in three stances: risky (the pattern
+fails on the next regime), safe (even a confirmed pattern is stale data),
+neutral (the pattern holds but the friction schedule — broker slabs, SEBON,
+DP, CGT, circuit ±15%, T+2 — changes the outcome). Scanner code is untouched
+by this section; it only governs how a run's output is reported.
