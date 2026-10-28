@@ -16,7 +16,7 @@ a researcher, or a business looking to raise capital.
 | `agents/` | The Nepali Capital Market Researcher agent (Markdown, free, local — copy it into your own AI tool) |
 | `guides/` | Market structure guide: how NEPSE, brokers, merchant bankers, mutual funds, bonds, and regulation fit together |
 | `templates/` | Market review template, instrument comparison template, participant map template |
-| `scanner/` | NEPSE EMA/SMA crossover scanner (Python, zero dependencies, 40/40 tests): EMA/SMA crossovers, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume checks, with signal-vs-noise labels. Runs on a user-supplied CSV — no live NEPSE feed exists (no documented free public NEPSE OHLCV API verified). See `scanner/README.md`. |
+| `scanner/` | NEPSE EMA/SMA crossover scanner (Python, zero dependencies, 57/57 tests): EMA/SMA crossovers, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume checks, with signal-vs-noise labels. Runs on a user-supplied CSV — no live NEPSE feed exists (no documented free public NEPSE OHLCV API verified). See `scanner/README.md`. |
 | `research/` | Teardown of public NEPSE reference sites (Nepalytix, Chart Nepali, Chukul, Nepse Alpha) and their data sources — public information only, no code copied, no paywalled data accessed. |
 
 ## Quick start — use the agent (free, local)
@@ -68,6 +68,22 @@ plausible it sounds.
   Nepal (Terai), inputs only).
 - `nepali-business-opportunities/` — business opportunities inside Nepal,
   scored with a framework, not asserted.
+
+## Limitations
+
+- The scanner runs on a user-supplied CSV only. No live NEPSE feed exists
+  (no documented free public NEPSE OHLCV API verified), and nothing here
+  should be read as live market data.
+- Indicator signals are signal-vs-noise labels on historical CSV data,
+  not predictions and not recommendations.
+- Market-structure descriptions are a map, not a dataset: any specific
+  claim about size, growth, listings, or returns must be sourced in the
+  file that makes it, or treated as TO VERIFY.
+
+> Research only, not investment advice; never a buy/sell recommendation
+
+See `CONTRIBUTING.md` for how to contribute and `SECURITY.md` for how to
+report a security issue privately.
 
 ## License
 

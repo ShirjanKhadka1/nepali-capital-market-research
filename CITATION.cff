@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Cite this repository"
+title: "Nepali Capital Market Research"
+authors:
+  - family-names: Khadka
+    given-names: Shirjan
+date-released: 2026-10-28
+license: MIT
+url: "https://github.com/ShirjanKhadka1/nepali-capital-market-research"
