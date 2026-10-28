@@ -162,5 +162,4 @@ Findings:
 | `tests/test_scanner.py` | 30 tests: known values, crossovers, boundaries, bad data |
 | `tests/test_edge_cases.py` | 10 tests: gaps, flat/circuit-limit series, spikes, missing days, short history, failure isolation, look-ahead |
 
-Status: **built and tested locally, NOT deployed.** Deployment needs the
-parent agent's go-ahead and a fresh live check of the repo state.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); tests 40/40 verified locally 28 Oct 2026. A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
