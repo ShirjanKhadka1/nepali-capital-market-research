@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (57 tests, all passing on 28 Oct 2026;
+Tests: `python3 -m pytest tests/ -v` (70 tests, all passing on 29 Oct 2026;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -138,6 +138,75 @@ Findings:
    spikes, price gaps, and 2-bar histories all produce finite values or
    `n/a`, never inf, NaN, or a crash. Final count: **57/57 tests pass** (40 original + 17 signal-label tests).
 
+## Walk-forward backtest (29 Oct 2026)
+
+`backtest.py` scores past crossover patterns walk-forward: a signal at
+time `t` uses only data up to `t` (EMA at `i` uses closes up to `i`;
+a test proves a cross at `t` is identical on the prefix ending at `t`).
+The outcome — the close `horizon` bars later — only ever scores the
+signal, never forms it. Labels are PATTERN ONLY: a "win" means only
+"the price moved in the direction of the past cross over the horizon".
+Never a buy/sell/hold recommendation, never a prediction, and never
+evidence about NEPSE.
+
+Run it on your own single-symbol CSV:
+
+```bash
+cd scanner
+python3 -c "
+import sys; sys.path.insert(0, '.')
+from backtest import backtest_csv
+r = backtest_csv('my_prices.csv')  # defaults: EMA(20)/EMA(50), horizon 5
+print(r['metrics'])
+for e in r['events']: print(e)
+"
+```
+
+Metrics (defined in `backtest.py`'s docstring): hit rate (wins /
+events, flats counted as events), mean/median forward return, mean
+absolute error of a no-change forecast on the signal windows, and the
+naive baseline — the same scoring over EVERY eligible window after
+slow-average warm-up, with no signal at all. `hit_rate_lift` is the
+signal hit rate minus the matching naive rate. Crosses too close to
+the series end for a full horizon are counted as `excluded`, never
+scored on a partial horizon.
+
+### Example result — AAPL, NOT NEPSE data
+
+Series: AAPL daily closes, 2024-01-02 to 2025-12-31, 502 bars, fetched
+once 29 Oct 2026 from the Yahoo Finance chart API (see
+`examples/aapl-example-2026-10-29.md` for symbol, range, source, and
+fetch date). It demonstrates the method only; it says nothing about
+NEPSE. Defaults EMA(20)/EMA(50); only 5 crosses in 502 bars, so every
+rate below rests on a handful of events and proves nothing on its own.
+
+| Horizon | Direction | Events | Wins | Losses | Hit rate | Naive rate | Lift | Mean fwd return |
+|---|---|---|---|---|---|---|---|---|
+| 5 bars | Bullish | 3 | 1 | 2 | 33.3% | 56.5% (448 windows) | −23.1 pts | +0.47% |
+| 5 bars | Bearish | 2 | 1 | 1 | 50.0% | 43.5% (448 windows) | +6.5 pts | +1.62% |
+| 5 bars | Combined | 5 | 2 | 3 | 40.0% | — | — | — |
+| 20 bars | Bullish | 3 | 2 | 1 | 66.7% | 68.6% (433 windows) | −1.9 pts | −1.87% |
+| 20 bars | Bearish | 2 | 1 | 1 | 50.0% | 31.4% (433 windows) | +18.6 pts | −6.05% |
+| 20 bars | Combined | 5 | 3 | 2 | 60.0% | — | — | — |
+
+Every event, wins AND losses, at the 5-bar horizon:
+
+| Signal date | Direction | Outcome | Forward return | Signal → horizon close |
+|---|---|---|---|---|
+| 2024-05-10 | Bullish | win | +3.73% | 183.05 → 189.87 (2024-05-17) |
+| 2025-01-22 | Bearish | loss | +6.94% (price rose) | 223.83 → 239.36 (2025-01-29) |
+| 2025-02-19 | Bullish | loss | −1.84% | 244.87 → 240.36 (2025-02-26) |
+| 2025-03-11 | Bearish | win | −3.69% | 220.84 → 212.69 (2025-03-18) |
+| 2025-07-09 | Bullish | loss | −0.46% | 211.14 → 210.16 (2025-07-16) |
+
+Read honestly: at 5 bars the bullish pattern lost more often than it
+won (1 win, 2 losses) and trailed its naive baseline by 23.1 points;
+at 20 bars it won 2 of 3 yet still trailed the naive positive rate and
+averaged −1.87% because its one loss (−12.10%) outweighed its wins.
+A hit rate without its losses, its baseline, and its event count is a
+claim, not evidence — this table keeps all three. No event was
+excluded (0 at both horizons).
+
 ## What this scanner deliberately does NOT do
 
 - No live data feed. Research on 28 Oct 2026 found no documented, free,
@@ -166,5 +235,9 @@ Findings:
 | `examples/screenshot-example-2026-10-28.md` | The six screenshot symbols, labelled as a screenshot example, NOT live prices |
 | `tests/test_scanner.py` | 30 tests: known values, crossovers, boundaries, bad data |
 | `tests/test_edge_cases.py` | 10 tests: gaps, flat/circuit-limit series, spikes, missing days, short history, failure isolation, look-ahead |
+| `backtest.py` | Walk-forward crossover backtest (pattern only): events, hit rate, naive baseline, excluded count |
+| `tests/test_backtest.py` | 13 tests: hand-checked wins/losses/flats, naive baseline, no-lookahead, near-end exclusion, CSV round-trip |
+| `examples/aapl-daily-closes-2024-2025.csv` | 502-bar AAPL daily example (Yahoo Finance chart API, fetched 29 Oct 2026) — NOT NEPSE data |
+| `examples/aapl-example-2026-10-29.md` | Source note for the AAPL example: symbol, range, source, fetch date |
 
 Status: **Live on GitHub** (public, main, since 28 Oct 2026); tests 57/57 verified locally 28 Oct 2026. A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
