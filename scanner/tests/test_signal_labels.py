@@ -18,8 +18,8 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data import Candle, NepseDataError, load_multi_csv, load_multi_csv_report  # noqa: E402
-from scanner import analyse, scan_report, signal_label  # noqa: E402
+from data import Candle, NepseDataError, load_multi_csv, load_multi_csv_report
+from scanner import analyse, scan_report, signal_label
 
 ALLOWED_LABELS = {"NO SIGNAL", "NOISE", "WEAK", "WATCH",
                   "CONFIRMED (pattern only)"}
