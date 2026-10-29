@@ -1,12 +1,12 @@
 # Phase 7: Dependabot config. Enablement on GitHub is TO VERIFY
 # after deployment; nothing here creates a pull request by itself.
+# NOTE (29 Oct 2026): the pip block was removed — this repo has no pip
+# manifest anywhere (zero-dependency scanner, no requirements.txt or
+# pyproject.toml), so Dependabot's pip updater failed weekly with
+# dependency_file_not_found looking in "/". Only github-actions
+# updates are configured, matching the workflows that actually exist.
 version: 2
 updates:
-  - package-ecosystem: pip
-    directory: "/"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
