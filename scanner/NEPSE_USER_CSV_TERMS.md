@@ -157,4 +157,4 @@ Rules (enforced by `data.load_csv` / `data.load_multi_csv`, wrapped by
 - No real-NEPSE backtest or walk-forward re-run: with no permitted
   dataset, both analyses were re-run on the EXISTING labelled
   example data instead (see `R6-EXAMPLE-DATA-RESULTS.md` in this
-  folder — to be added alongside this note on the same branch).
+  folder, on the same branch).
