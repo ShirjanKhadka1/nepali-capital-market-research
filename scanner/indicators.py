@@ -28,8 +28,18 @@ with ValueError, and reject non-positive prices where a ratio needs one.
 import math
 
 __all__ = [
-    "sma", "ema", "rsi", "macd", "bollinger", "atr", "stochastic", "adx",
-    "volume_ratio", "find_crosses", "latest_cross", "since_cross_pct",
+    "adx",
+    "atr",
+    "bollinger",
+    "ema",
+    "find_crosses",
+    "latest_cross",
+    "macd",
+    "rsi",
+    "since_cross_pct",
+    "sma",
+    "stochastic",
+    "volume_ratio",
 ]
 
 
