@@ -34,8 +34,8 @@ try:
 except ImportError:  # running as scanner.nepse_bridge package
     from .data import Candle, NepseDataError, load_csv, load_multi_csv
 
-__all__ = ["NepseDataError", "Candle", "load_user_csv",
-           "load_user_csv_single", "SYNTHETIC_MARKER"]
+__all__ = ["SYNTHETIC_MARKER", "Candle", "NepseDataError",
+           "load_user_csv", "load_user_csv_single"]
 
 
 SYNTHETIC_MARKER = "SYNTHETIC"
