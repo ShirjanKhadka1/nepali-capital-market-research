@@ -17,11 +17,22 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data import Candle, NepseDataError, NepseLiveFetcher, load_csv, load_multi_csv  # noqa: E402
-from indicators import (adx, atr, bollinger, ema, find_crosses, latest_cross,  # noqa: E402
-                        macd, rsi, since_cross_pct, sma, stochastic,
-                        volume_ratio)
-from scanner import analyse, scan  # noqa: E402
+from data import Candle, NepseDataError, NepseLiveFetcher, load_csv, load_multi_csv
+from indicators import (
+    adx,
+    atr,
+    bollinger,
+    ema,
+    find_crosses,
+    latest_cross,
+    macd,
+    rsi,
+    since_cross_pct,
+    sma,
+    stochastic,
+    volume_ratio,
+)
+from scanner import analyse, scan
 
 
 def candles_from_closes(closes, start_day=1):
