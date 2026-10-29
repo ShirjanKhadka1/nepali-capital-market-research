@@ -8,13 +8,11 @@ generic scanner failure modes, tested on synthetic series.
 import os
 import sys
 
-import pytest
-
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data import Candle, load_multi_csv_report  # noqa: E402
-from indicators import adx, atr, bollinger, ema, rsi, stochastic  # noqa: E402
-from scanner import analyse, scan_report, signal_label  # noqa: E402
+from data import Candle, load_multi_csv_report
+from indicators import adx, atr, bollinger, ema, rsi, stochastic
+from scanner import analyse, scan_report, signal_label
 
 
 def mk(closes, volumes=None, start="2026-01-01"):
