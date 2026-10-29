@@ -10,13 +10,35 @@ flagged in the row, not hidden: see `thin_volume` and the README.
 from datetime import date as _date
 
 try:
-    from indicators import (adx, atr, bollinger, ema, find_crosses, latest_cross,
-                        macd, rsi, since_cross_pct, sma, stochastic,
-                        volume_ratio)
+    from indicators import (
+        adx,
+        atr,
+        bollinger,
+        ema,
+        find_crosses,
+        latest_cross,
+        macd,
+        rsi,
+        since_cross_pct,
+        sma,
+        stochastic,
+        volume_ratio,
+    )
 except ImportError:  # running as scanner.cli package
-    from .indicators import (adx, atr, bollinger, ema, find_crosses, latest_cross,
-                            macd, rsi, since_cross_pct, sma, stochastic,
-                            volume_ratio)
+    from .indicators import (
+        adx,
+        atr,
+        bollinger,
+        ema,
+        find_crosses,
+        latest_cross,
+        macd,
+        rsi,
+        since_cross_pct,
+        sma,
+        stochastic,
+        volume_ratio,
+    )
 
 DEFAULT_FAST = 20
 DEFAULT_SLOW = 50
