@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (70 tests, all passing on 29 Oct 2026;
+Tests: `python3 -m pytest tests/ -v` (70 tests, all passing on 29 Oct 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -235,9 +235,10 @@ excluded (0 at both horizons).
 | `examples/screenshot-example-2026-10-28.md` | The six screenshot symbols, labelled as a screenshot example, NOT live prices |
 | `tests/test_scanner.py` | 30 tests: known values, crossovers, boundaries, bad data |
 | `tests/test_edge_cases.py` | 10 tests: gaps, flat/circuit-limit series, spikes, missing days, short history, failure isolation, look-ahead |
+| `tests/test_signal_labels.py` | 17 tests: signal-vs-noise labels |
 | `backtest.py` | Walk-forward crossover backtest (pattern only): events, hit rate, naive baseline, excluded count |
 | `tests/test_backtest.py` | 13 tests: hand-checked wins/losses/flats, naive baseline, no-lookahead, near-end exclusion, CSV round-trip |
 | `examples/aapl-daily-closes-2024-2025.csv` | 502-bar AAPL daily example (Yahoo Finance chart API, fetched 29 Oct 2026) — NOT NEPSE data |
 | `examples/aapl-example-2026-10-29.md` | Source note for the AAPL example: symbol, range, source, fetch date |
 
-Status: **Live on GitHub** (public, main, since 28 Oct 2026); tests 57/57 verified locally 28 Oct 2026. A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); 70/70 tests verified locally 29 Oct 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
