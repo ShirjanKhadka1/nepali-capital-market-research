@@ -1,11 +1,12 @@
 {
   "repo": "nepali-capital-market-research",
   "generated_by": "scripts/generate_status.py (Round 3: pytest run + file reads)",
-  "generated_at": "2026-10-29",
+  "generated_at": "2026-10-30",
   "method": "tests counted from a live pytest run in this checkout; version read from pyproject.toml when present",
   "per_file_tests": {
     "test_backtest.py": 13,
     "test_edge_cases.py": 10,
+    "test_nepse_bridge.py": 3,
     "test_scanner.py": 30,
     "test_signal_labels.py": 17
   },
@@ -15,6 +16,6 @@
   "backtest_tests": 13,
   "version": null,
   "version_note": "TO VERIFY: this repo carries no version file",
-  "tests_passed": 70,
-  "tests_total": 70
+  "tests_passed": 73,
+  "tests_total": 73
 }
