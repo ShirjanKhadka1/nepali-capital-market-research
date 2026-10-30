@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (70 tests, all passing on 29 Oct 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
+Tests: `python3 -m pytest tests/ -v` (73 tests, all passing on 30 Oct 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -241,4 +241,4 @@ excluded (0 at both horizons).
 | `examples/aapl-daily-closes-2024-2025.csv` | 502-bar AAPL daily example (Yahoo Finance chart API, fetched 29 Oct 2026) — NOT NEPSE data |
 | `examples/aapl-example-2026-10-29.md` | Source note for the AAPL example: symbol, range, source, fetch date |
 
-Status: **Live on GitHub** (public, main, since 28 Oct 2026); 70/70 tests verified locally 29 Oct 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); 73/73 tests verified locally 30 Oct 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
