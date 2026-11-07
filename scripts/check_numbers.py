@@ -24,7 +24,7 @@ import re
 from pathlib import Path
 
 # ---- per-repo spec (Round 3) ----
-STATUS_FIELDS = ["repo", "tests_passed", "tests_total", "generated_by", "generated_at"]
+STATUS_FIELDS = ["repo", "tests_passed", "tests_total", "case_studies", "datasets", "generated_by", "generated_at"]
 PROSE_FILES = ["README.md", "scanner/README.md"]
 PATTERNS = [
     (r"(\d+)/(\d+) tests", "tests_total", "tests total (N/N form)"),
@@ -65,6 +65,14 @@ def main():
             errors.append(
                 f"suite not green in status.json: "
                 f"{status['tests_passed']}/{status.get('tests_total')}")
+    cs = root / "case-studies"
+    if cs.is_dir():
+        n = len([d for d in cs.iterdir() if d.is_dir()])
+        if status.get("case_studies") is not None and n != status["case_studies"]:
+            errors.append(f"case-studies/ dirs={n} status.json case_studies={status['case_studies']}")
+        n_data = len(list(cs.glob("*/data/*.csv")))
+        if status.get("datasets") is not None and n_data != status["datasets"]:
+            errors.append(f"case-studies/*/data/*.csv={n_data} status.json datasets={status['datasets']}")
     for rel in PROSE_FILES:
         path = root / rel
         if not path.exists():
