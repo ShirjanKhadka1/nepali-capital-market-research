@@ -54,7 +54,9 @@ def main():
         "generated_by": "scripts/generate_status.py (Round 3: pytest run + file reads)",
         "generated_at": date.today().isoformat(),
         "method": "tests counted from a live pytest run in this checkout; "
-                  "version read from pyproject.toml when present",
+                  "version read from pyproject.toml when present; "
+                  "case studies counted as case-studies/*/ subdirectories, "
+                  "datasets as case-studies/*/data/*.csv",
     }
     
     per_file = {}
@@ -68,6 +70,11 @@ def main():
     status["edge_tests"] = per_file.get("test_edge_cases.py")
     status["signal_tests"] = per_file.get("test_signal_labels.py")
     status["backtest_tests"] = per_file.get("test_backtest.py")
+    cs_dir = root / "case-studies"
+    case_studies = len([d for d in cs_dir.iterdir() if d.is_dir()]) if cs_dir.is_dir() else 0
+    datasets = len(list(cs_dir.glob("*/data/*.csv"))) if cs_dir.is_dir() else 0
+    status["case_studies"] = case_studies
+    status["datasets"] = datasets
     status["version"] = None
     status["version_note"] = "TO VERIFY: this repo carries no version file"
 
