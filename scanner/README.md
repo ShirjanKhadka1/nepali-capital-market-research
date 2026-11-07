@@ -29,6 +29,15 @@ real prices. Single-symbol files use `date,close,high,low,volume`.
 Tests: `python3 -m pytest tests/ -v` (113 tests, all passing on 7 Nov 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
 pytest itself is a test-only dependency, the scanner needs none).
 
+Quality gates (Phase 4): `pip install -r requirements-dev.txt`
+(pinned pytest/ruff, identical to CI), then `python ../scripts/qa.py`
+— tests, lint, counts, licence, secret scan, link check, and a
+fresh-clone smoke run, in order, stopping at the first failure. The
+same gates run in CI via the quality job in
+`.github/workflows/test.yml`; the Phase 4 update to that workflow is
+staged for deployment via the browser route and is not live until its
+first run is observed.
+
 ## What each indicator means
 
 | Indicator | Meaning | Default |
