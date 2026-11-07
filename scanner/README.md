@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (108 tests, all passing on 7 Nov 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
+Tests: `python3 -m pytest tests/ -v` (113 tests, all passing on 7 Nov 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -343,7 +343,8 @@ excluded (0 at both horizons).
 | `backtest.py` | Walk-forward crossover backtest (pattern only): events, hit rate, naive baseline, excluded count |
 | `tests/test_backtest.py` | 13 tests: hand-checked wins/losses/flats, naive baseline, no-lookahead, near-end exclusion, CSV round-trip |
 | `tests/test_setups_screen.py` | 35 tests: five named setups (positive, boundary, negative, short history), coverage + PARTIAL wording, confirmation cap, screen grammar + audit log |
+| `tests/test_bnt_case_study.py` | 5 tests: BNT case-study CSV parses (18 rows, expected columns), key figures match the verified-figures file, explicit nil is 0 not missing, every row names a source, study still labelled Inputs + skeleton NOT a valuation |
 | `examples/aapl-daily-closes-2024-2025.csv` | 502-bar AAPL daily example (Yahoo Finance chart API, fetched 29 Oct 2026) — NOT NEPSE data |
 | `examples/aapl-example-2026-10-29.md` | Source note for the AAPL example: symbol, range, source, fetch date |
 
-Status: **Live on GitHub** (public, main, since 28 Oct 2026); 108/108 tests verified locally 7 Nov 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); 113/113 tests verified locally 7 Nov 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
