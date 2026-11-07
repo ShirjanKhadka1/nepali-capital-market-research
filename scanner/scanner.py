@@ -168,6 +168,65 @@ def signal_label(row):
     return "WEAK", ["cross only — no volume or trend confirmation"]
 
 
+def coverage_summary(groups, failures):
+    """Coverage accounting for a scan over `groups`.
+
+    Returns {"universe", "scanned", "failed", "usable",
+    "failed_symbols"}:
+    - universe: symbols in the input.
+    - scanned: symbols the scan attempted (== universe; a scan never
+      silently skips a symbol it was given).
+    - failed: symbols whose analysis raised and were excluded.
+    - usable: symbols analysed successfully (scanned - failed). A
+      symbol that analysed fine but matched no rule still counts as
+      usable — "usable" is about the data, not the match.
+    - failed_symbols: the failed symbols, sorted, so the gap is
+      nameable, not just countable.
+    """
+    failed_symbols = sorted(f["symbol"] for f in failures)
+    universe = len(groups)
+    return {
+        "universe": universe,
+        "scanned": universe,
+        "failed": len(failures),
+        "usable": universe - len(failures),
+        "failed_symbols": failed_symbols,
+    }
+
+
+def scan_with_coverage(groups, fast_period=DEFAULT_FAST,
+                       slow_period=DEFAULT_SLOW, only_crossed=True):
+    """Like scan(), plus explicit coverage reporting.
+
+    Returns {"rows", "coverage", "partial", "note", "failures"}.
+    "coverage" is coverage_summary() above. "partial" is True when
+    any symbol failed, and "note" says so in plain language:
+    "PARTIAL: N of M symbols failed and were excluded ..." — a scan
+    with failures is never presented as complete. When nothing
+    failed, "note" says the scan is complete and "partial" is False.
+    """
+    rows, failures = scan_report(groups, fast_period, slow_period,
+                                 only_crossed)
+    coverage = coverage_summary(groups, failures)
+    partial = coverage["failed"] > 0
+    if partial:
+        note = (f"PARTIAL: {coverage['failed']} of "
+                f"{coverage['universe']} symbols failed and were "
+                f"excluded from the scan: "
+                f"{', '.join(coverage['failed_symbols'])}. Rows below "
+                f"cover only the {coverage['usable']} usable symbols.")
+    else:
+        note = (f"Complete: all {coverage['universe']} symbols scanned, "
+                f"no failures.")
+    return {
+        "rows": rows,
+        "coverage": coverage,
+        "partial": partial,
+        "note": note,
+        "failures": failures,
+    }
+
+
 def scan(groups, fast_period=DEFAULT_FAST, slow_period=DEFAULT_SLOW,
          only_crossed=True):
     """Scan {symbol: {'sector', 'candles'}}. With only_crossed=True (the
