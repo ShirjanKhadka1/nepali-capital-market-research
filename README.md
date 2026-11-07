@@ -16,7 +16,8 @@ a researcher, or a business looking to raise capital.
 | `agents/` | The Nepali Capital Market Researcher agent (Markdown, free, local — copy it into your own AI tool) |
 | `guides/` | Market structure guide: how NEPSE, brokers, merchant bankers, mutual funds, bonds, and regulation fit together |
 | `templates/` | Market review template, instrument comparison template, participant map template |
-| `scanner/` | NEPSE EMA/SMA crossover scanner (Python, zero dependencies, 108/108 tests passing — generated count in `status.json`): EMA/SMA crossovers, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume checks, with signal-vs-noise labels, coverage reporting, five named setups, and an auditable criteria screen. Runs on a user-supplied CSV — no live NEPSE feed exists (no documented free public NEPSE OHLCV API verified). See `scanner/README.md`. |
+| `scanner/` | NEPSE EMA/SMA crossover scanner (Python, zero dependencies, 113/113 tests passing — generated count in `status.json`): EMA/SMA crossovers, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume checks, with signal-vs-noise labels, coverage reporting, five named setups, and an auditable criteria screen. Runs on a user-supplied CSV — no live NEPSE feed exists (no documented free public NEPSE OHLCV API verified). See `scanner/README.md`. |
+| `case-studies/` | Company case studies, starting with Bottlers Nepal (Terai) (BNT, NEPSE) — inputs + skeleton, NOT a valuation: verified FY 2081/82 figures (`case-studies/bnt/data/bnt-fy2081-82.csv`), single-source verified-figures file, and a documented model skeleton (`case-studies/bnt/model/`). Moved here from `nepal-market-research` on 7 Nov 2026; that repo is retained for history with a pointer to this repo. |
 | `research/` | Teardown of public NEPSE reference sites (Nepalytix, Chart Nepali, Chukul, Nepse Alpha) and their data sources — public information only, no code copied, no paywalled data accessed. |
 
 ## Quick start — use the agent (free, local)
@@ -65,7 +66,9 @@ plausible it sounds.
 - `finance-research-agents/` — the full agent pack (this repo's agent is
   the capital-market specialist inside that system).
 - `nepal-market-research/` — company case studies (starting with Bottlers
-  Nepal (Terai), inputs only).
+  Nepal (Terai), inputs only). **Merged into this repo on 7 Nov 2026:**
+  the BNT study now lives in `case-studies/bnt/` here; that repo is
+  retained for history with a README pointer to this repo.
 - `nepali-business-opportunities/` — business opportunities inside Nepal,
   scored with a framework, not asserted.
 
