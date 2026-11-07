@@ -19,10 +19,10 @@ import sys
 
 try:
     from data import load_multi_csv_report
-    from scanner import scan, scan_report
+    from scanner import scan, scan_with_coverage
 except ImportError:  # running as scanner.cli package
     from .data import load_multi_csv_report
-    from .scanner import scan, scan_report
+    from .scanner import scan, scan_with_coverage
 
 
 def _fmt(value, ndigits=2):
@@ -59,11 +59,14 @@ def main(argv=None):
             print(f"FAILED: {f['symbol']}: {f['reason']}", file=sys.stderr)
         print("error: no usable symbols in CSV", file=sys.stderr)
         return 2
-    rows, scan_failures = scan_report(groups, args.fast, args.slow,
-                                      only_crossed=not args.all)
+    result = scan_with_coverage(groups, args.fast, args.slow,
+                                only_crossed=not args.all)
+    rows = result["rows"]
+    scan_failures = result["failures"]
     print("NEPSE Crossover Scanner — research only, not investment advice")
     print(f"Exchange: NEPSE | Fast EMA({args.fast}) / Slow EMA({args.slow}) "
           f"| Symbols scanned: {len(groups)} | Crossed: {len(rows)}")
+    print(result["note"])
     for f in load_failures + scan_failures:
         print(f"FAILED (skipped, reason logged): {f['symbol']}: "
               f"{f['reason']}")
