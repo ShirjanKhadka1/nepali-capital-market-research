@@ -26,7 +26,7 @@ and the corporate-action warning are in
 `../guides/nepal-data-handling.md` — read it before running a scan on
 real prices. Single-symbol files use `date,close,high,low,volume`.
 
-Tests: `python3 -m pytest tests/ -v` (73 tests, all passing on 30 Oct 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
+Tests: `python3 -m pytest tests/ -v` (108 tests, all passing on 7 Nov 2026; generated count in `../status.json`, checked by `../scripts/check_numbers.py`;
 pytest itself is a test-only dependency, the scanner needs none).
 
 ## What each indicator means
@@ -86,6 +86,107 @@ by volume and trend" — never a prediction, never a buy signal:
 | WEAK | Cross only, no confirmation |
 | WATCH | Cross + volume >= 1.0x average, trend unconfirmed |
 | CONFIRMED (pattern only) | Cross + volume >= 1.5x AND ADX >= 25 |
+
+## Coverage reporting — a scan is PARTIAL when anything failed
+
+`scan_with_coverage()` (in `scanner.py`; the CLI uses it on every
+run) returns the rows plus explicit coverage accounting:
+
+```python
+{"universe": N, "scanned": N, "failed": N, "usable": N,
+ "failed_symbols": [...]}
+```
+
+- **universe:** symbols in the input. **scanned:** symbols attempted
+  (always == universe — a scan never silently skips a symbol it was
+  given). **failed:** symbols whose analysis raised and were excluded.
+  **usable:** symbols analysed successfully (scanned − failed). A
+  symbol that analysed fine but matched no rule still counts as
+  usable — "usable" is about the data, not the match.
+  **failed_symbols:** the failed symbols, sorted, so the gap is
+  nameable, not just countable.
+
+If any symbol failed, the result is explicitly PARTIAL and says so in
+plain language: "PARTIAL: 2 of 10 symbols failed and were excluded
+from the scan: SYM1, SYM2. Rows below cover only the 8 usable
+symbols." A scan with failures is never presented as complete. When
+nothing failed the note says "Complete: all N symbols scanned, no
+failures." `scan_setups()` reports the same coverage shape. The
+discipline (coverage counts + PARTIAL flag) is adapted from
+day-trader-skill (MIT, commit 3d0f4ef); see `SOURCES_MERGE_2026-11-07.md`.
+
+## Named setups — daily closes only
+
+`setups.py` implements five close-based setups. A match means only
+"the symbol's past closes satisfy the stated rule" — never a
+recommendation, never a prediction. Each match entry carries the exact
+rule values that triggered (breakout level, RSI value, ...), so any
+match can be recomputed by hand from the CSV.
+
+| Setup | Exact rule |
+|---|---|
+| `breakout_20d` | Latest close above the highest close of the prior 20 closes (needs 21 closes). A close exactly equal to the level is not a breakout |
+| `bull_flag` | Close rose at least 10% over the 10 sessions ending 6 bars ago (closes[−16] → closes[−6]), then the last 5 closes span at most 5% ((max − min) / min). Needs 16 closes. Both thresholds inclusive |
+| `reclaim_ma20` | Latest close above its 20-day moving average while the prior close was at or below its 20-day moving average (needs 21 closes) |
+| `oversold` | Wilder RSI-14 below 30 on the latest close (reuses `indicators.rsi`; needs 15 closes). RSI exactly 30 is not oversold |
+| `oversold_bounce` | Wilder RSI-14 below 30 at least once in the last 5 sessions AND the latest close above the prior close (needs 15 closes) |
+
+Run them with `scan_setups(groups)` — it returns
+`{"matches", "coverage", "partial", "capped", "unconfirmed",
+"failures", "note", "max_confirmations", "confirmations_used"}`.
+`matches` maps each setup name to its matching symbols with their
+rule values. A symbol with too few closes for a setup simply does
+not match it — that is not a failure.
+
+## Two-stage confirmation
+
+`scan_setups()` confirms in two stages, adapted from the
+day-trader-skill pattern:
+
+1. **Cheap necessary condition first.** Evaluated per setup from the
+   shared per-symbol indicator snapshot (one `analyse()` call per
+   symbol, reused across all five setups) or from a tail slice of the
+   closes — O(1) per setup once the snapshot exists. Each stage-1
+   condition is implied by its setup's exact rule (the proof is in
+   `setups.py`), so stage 1 never creates a false negative; for the
+   RSI setups stage 1 checks the same value stage 2 recomputes.
+2. **Expensive exact check second.** The rule is recomputed from the
+   raw closes, and only confirmed matches are reported.
+
+Confirmations are capped: `max_confirmations` (default 50). When the
+cap is hit, the remaining candidates are listed as `unconfirmed`,
+`capped` is True, and the result is PARTIAL with a plain-language
+note naming the cap. An unconfirmed candidate is never reported as a
+match and never silently dropped.
+
+## Criteria grammar — an auditable screen
+
+`screen.py` filters rows (e.g. `analyse()` rows) by a list of
+field/operator/value clauses, applied in order:
+
+```python
+from screen import screen
+result = screen(rows, [
+    {"field": "rsi14", "op": "<", "value": 30},
+    {"field": "ltp", "op": ">=", "value": 100},
+])
+result["rows"]    # rows that survived every clause, in input order
+result["audit"]   # [{"clause": ..., "removed": N, "remaining": N}, ...]
+```
+
+Operators: `>`, `>=`, `<`, `<=`, `==`, `between` (inclusive
+`[lo, hi]`). The audit log records, per clause in order, how many
+names that clause removed and how many remained — replay the clauses
+in order and the counts reproduce, so a screen is auditable. A row
+whose field value is `None` ("no data for this indicator") never
+matches a numeric clause, so it is removed by that clause and the
+removal is counted. Errors are loud: an unknown operator, a malformed
+`between` value, a field missing from a row, or an incomparable value
+all raise `ValueError` naming the problem — a typo in a field name
+never silently empties a screen. The idea (clauses + per-clause audit
+log) is adapted from FinceptTerminal's screener (AGPL-3.0, commit
+7716ee8); the grammar and implementation are written from scratch,
+no Fincept code copied. See `SOURCES_MERGE_2026-11-07.md`.
 
 ## Failure handling — how this scanner refuses to fail like others
 
@@ -229,7 +330,10 @@ excluded (0 at both horizons).
 |---|---|
 | `indicators.py` | SMA, EMA, RSI, MACD, Bollinger, ATR, Stochastic, ADX, volume ratio, crossover detection |
 | `data.py` | CSV loaders (single + multi-symbol) and the unimplemented live-fetcher stub |
-| `scanner.py` | Per-symbol analysis + the crossover scan |
+| `scanner.py` | Per-symbol analysis + the crossover scan + coverage reporting (`scan_with_coverage`) |
+| `setups.py` | Five named close-based setups + two-stage confirmation scan (`scan_setups`) |
+| `screen.py` | Criteria-grammar screen (`screen`) with per-clause audit log |
+| `SOURCES_MERGE_2026-11-07.md` | Sources merged 7 Nov 2026: day-trader-skill (MIT) + FinceptTerminal (AGPL-3.0, ideas only) — adopted / adapted / rejected |
 | `cli.py` | Command-line scan printing the screenshot's columns |
 | `examples/demo_prices.csv` | 100-bar SYNTHETIC DEMO series (not market data) |
 | `examples/screenshot-example-2026-10-28.md` | The six screenshot symbols, labelled as a screenshot example, NOT live prices |
@@ -238,7 +342,8 @@ excluded (0 at both horizons).
 | `tests/test_signal_labels.py` | 17 tests: signal-vs-noise labels |
 | `backtest.py` | Walk-forward crossover backtest (pattern only): events, hit rate, naive baseline, excluded count |
 | `tests/test_backtest.py` | 13 tests: hand-checked wins/losses/flats, naive baseline, no-lookahead, near-end exclusion, CSV round-trip |
+| `tests/test_setups_screen.py` | 35 tests: five named setups (positive, boundary, negative, short history), coverage + PARTIAL wording, confirmation cap, screen grammar + audit log |
 | `examples/aapl-daily-closes-2024-2025.csv` | 502-bar AAPL daily example (Yahoo Finance chart API, fetched 29 Oct 2026) — NOT NEPSE data |
 | `examples/aapl-example-2026-10-29.md` | Source note for the AAPL example: symbol, range, source, fetch date |
 
-Status: **Live on GitHub** (public, main, since 28 Oct 2026); 73/73 tests verified locally 30 Oct 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
+Status: **Live on GitHub** (public, main, since 28 Oct 2026); 108/108 tests verified locally 7 Nov 2026 (generated count in `../status.json`). A CI workflow (`.github/workflows/test.yml` in the parent repo, pytest on Python 3.10/3.11/3.12) is included with this update so the suite also runs publicly on GitHub.
