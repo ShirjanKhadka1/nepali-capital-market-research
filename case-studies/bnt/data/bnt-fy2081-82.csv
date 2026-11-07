@@ -1,0 +1,19 @@
+item,fy_2081_82_npr,fy_2080_81_npr,unit,source,notes
+revenue_from_operations,7527297984,8771297424,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Revenue fell 14.2% year on year (arithmetic: 7527297984 / 8771297424 - 1 = -14.18%, reported as -14.2%)"
+profit_from_operations_ebit,407359078,721109708,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Face label in the report is Profit from Operations; used here as EBIT. Fell 43.5% year on year (arithmetic: 407359078 / 721109708 - 1 = -43.51%, reported as -43.5%)"
+depreciation_and_amortisation,650871600,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Split on file: 646041660 + 4829940 = 650871600 (arithmetic checks)"
+profit_before_tax,218422271,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,
+current_tax,53371085,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,
+deferred_tax,15934615,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Current + deferred = 69305700 (arithmetic only; this is NOT the prior-period adjustment)"
+prior_period_tax_adjustment,763054705,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"The whole net-loss story: without it the year would not be a loss year (see model/sensitivity.md)"
+net_profit_loss,-613938134,339681626,NPR,39th annual report FY 2081/82 via verified-inputs ledger,
+eps,-507,281,NPR per share,39th annual report FY 2081/82 via verified-inputs ledger,"As reported (rounded). Arithmetic check: -613938134 / 1210000 = -507.38; 339681626 / 1210000 = 280.72"
+operating_cash_flow,1497212819,1108364321,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"OCF is a 3-year high on file, despite the reported net loss"
+capex_ppe_acquisition,197522182,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"PPE acquisition; the cash-flow-statement capex line used in the FCFF proxy"
+working_capital_ex_cash_ex_borrowings,1478090828,1937911582,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Change = 1478090828 - 1937911582 = -459820754, i.e. a Rs 459.8M release (arithmetic)"
+borrowings_total,2344466783,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"All current; nil non-current (see next two rows)"
+borrowings_current,2344466783,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,
+borrowings_non_current,0,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,"Nil — stated explicitly so it is not mistaken for a missing value"
+cash_and_cash_equivalents,36531377,,NPR,39th annual report FY 2081/82 via verified-inputs ledger,
+current_lease_liability,32042935,,NPR,39th annual report FY 2081/82 via case-study README,"Ledger rounds this to Rs 32.0M and records it as inside working capital; whether it belongs in working capital or in debt is UNDECIDED (see model/assumptions.md)"
+shares_outstanding,1210000,,shares,39th annual report FY 2081/82 via verified-inputs ledger,"Also the denominator for the EPS arithmetic check above"
