@@ -1,3 +1,29 @@
+# =====================================================================
+# NOT DEPLOYED — STAGED FILE ONLY (Phase 4, 7 Nov 2026).
+# This workflow is NOT live on GitHub. It was prepared locally and has
+# NOT been pushed via the API: the token behind the API helper lacks
+# workflow scope, so an API push of a .github/workflows/ file would
+# fail with 403. The parent deploys it via the GitHub web UI (browser
+# route) and then confirms the file exists on main and the first run
+# is observed green (or red, triaged honestly).
+# Do NOT describe this workflow as deployed, running, or green until
+# the parent confirms that deployment and a run.
+#
+# TARGET:
+#   Repo:   ShirjanKhadka1/nepali-capital-market-research
+#   Branch: main
+#   Path:   .github/workflows/test.yml   (UPDATE — replaces the Phase 7 file)
+#
+# Change vs the live Phase 7 file: the quality job no longer runs only
+# `ruff check scanner/`; it installs the pinned dev tools from
+# requirements-dev.txt and runs `python scripts/qa.py`, the single
+# Phase 4 entry point (tests, lint, counts, licence, secret scan, link
+# check, fresh-clone smoke). Matrix and smoke jobs are unchanged.
+# mypy is deliberately NOT run here: scanner/ uses a dual script/
+# package import mode that mypy rejects (measured 28 Oct 2026).
+# fetch-depth: 0 is deliberate: the secret gate scans `git log -p`,
+# and the default shallow checkout would make that scan vacuous.
+# =====================================================================
 # Phase 7: OS x Python matrix + quality gate.
 # Matrix job (pytest only) runs on Linux/macOS/Windows — the
 # macos/windows combinations are CI-only: never run locally,
@@ -27,12 +53,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "ruff==0.17.3"
-      - run: ruff check .
-        working-directory: scanner
+      - run: pip install -r requirements-dev.txt
+      - run: python scripts/qa.py
   smoke:
     runs-on: ubuntu-latest
     steps:
